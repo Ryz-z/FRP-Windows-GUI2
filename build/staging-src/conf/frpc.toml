@@ -1,0 +1,52 @@
+# frpc 客户端配置示例
+# 说明：图形界面（FrpWin.exe）在保存设置时会重新生成这个文件。
+#       手工编写也可以，用命令行运行：frpc.exe -c frpc.toml
+
+# 服务端的公网 IP（或域名）与控制端口
+serverAddr = "服务器公网IP"
+serverPort = 7000
+
+# 认证令牌，必须与服务端 auth.token 完全一致
+auth.method = "token"
+auth.token = "请改成你自己的复杂密码"
+
+# 与服务端之间的连接启用 TLS 加密
+transport.tls.enable = true
+
+log.to = "console"
+log.level = "info"
+
+# ---------------- 代理规则 ----------------
+
+# 示例 1：把内网机器的远程桌面(3389)映射到服务器的 13389 端口
+[[proxies]]
+name = "rdp"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 3389
+remotePort = 13389
+
+# 示例 2：把内网网站映射出去，用域名访问（服务端需配置 vhostHTTPPort）
+# [[proxies]]
+# name = "web"
+# type = "http"
+# localIP = "127.0.0.1"
+# localPort = 80
+# customDomains = ["www.example.com"]
+
+# 示例 3：点对点安全穿透，不暴露公网端口
+# [[proxies]]
+# name = "secret-ssh"
+# type = "stcp"
+# localIP = "127.0.0.1"
+# localPort = 22
+# secretKey = "自己生成一串随机密钥"
+
+# 访问者（访问 stcp/xtcp 服务的一方填写）
+# [[visitors]]
+# name = "secret-ssh-visitor"
+# type = "stcp"
+# serverName = "secret-ssh"
+# secretKey = "与上面完全一致"
+# bindAddr = "127.0.0.1"
+# bindPort = 6000

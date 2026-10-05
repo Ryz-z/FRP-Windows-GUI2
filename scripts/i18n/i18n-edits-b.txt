@@ -1,0 +1,120 @@
+@@@Program.cs
+<<<
+                    MessageBox.Show("程序发生未处理的错误：\r\n\r\n" + ex, "FrpWin 错误",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+>>>
+                    MessageBox.Show(Loc.F("程序发生未处理的错误：\r\n\r\n{0}", ex), Loc.T("FrpWin 错误"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+@@@Program.cs
+<<<
+                string tip = "FrpWin 服务宿主不能直接在命令行下运行。\r\n\r\n" +
+                             "请通过 Windows 服务控制管理器启动它（服务名：FrpWinServer / FrpWinClient），" +
+                             "或者直接双击 FrpWin.exe 使用图形界面来启停 frp。";
+>>>
+                string tip = Loc.T("FrpWin 服务宿主不能直接在命令行下运行。\r\n\r\n") +
+                             Loc.T("请通过 Windows 服务控制管理器启动它（服务名：FrpWinServer / FrpWinClient），") +
+                             Loc.T("或者直接双击 FrpWin.exe 使用图形界面来启停 frp。");
+@@@Program.cs
+<<<
+                        DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " " + role + " 服务启动失败: " + ex + Environment.NewLine);
+>>>
+                        Loc.F("{0} {1} 服务启动失败: {2}{3}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), role, ex, Environment.NewLine));
+@@@Program.cs
+<<<
+            if (!File.Exists(exe))
+            {
+                Console.WriteLine("找不到程序文件：" + exe);
+                return 1;
+            }
+>>>
+            if (!File.Exists(exe))
+            {
+                Console.WriteLine(Loc.F("找不到程序文件：{0}", exe));
+                return 1;
+            }
+@@@Program.cs
+<<<
+                    if (runners.Count == 0)
+                    {
+                        Console.WriteLine("没有启用任何服务端连接，无事可做。");
+                        return 1;
+                    }
+>>>
+                    if (runners.Count == 0)
+                    {
+                        Console.WriteLine(Loc.T("没有启用任何服务端连接，无事可做。"));
+                        return 1;
+                    }
+@@@Program.cs
+<<<
+                Console.WriteLine("启动 " + tag + " 失败：" + ex.Message);
+>>>
+                Console.WriteLine(Loc.F("启动 {0} 失败：{1}", tag, ex.Message));
+@@@Program.cs
+<<<
+                Console.WriteLine("[" + labels[i] + "] 已启动 (PID " + runners[i].ProcessId + ")");
+            }
+            Console.WriteLine("按 Ctrl+C 结束。日志文件：" + AppPaths.ServiceLogFile(tag));
+>>>
+                Console.WriteLine(Loc.F("[{0}] 已启动 (PID {1})", labels[i], runners[i].ProcessId));
+            }
+            Console.WriteLine(Loc.F("按 Ctrl+C 结束。日志文件：{0}", AppPaths.ServiceLogFile(tag)));
+@@@Program.cs
+<<<
+            runner.Start(role, exe, cfg, AppPaths.InstallDir, AppPaths.ServiceLogFile(role), label);
+            Console.WriteLine("[" + label + "] 配置文件：" + cfg);
+>>>
+            runner.Start(role, exe, cfg, AppPaths.InstallDir, AppPaths.ServiceLogFile(role), label);
+            Console.WriteLine(Loc.F("[{0}] 配置文件：{1}", label, cfg));
+@@@Program.cs
+<<<
+            Console.WriteLine("配置文件不存在，已自动生成：" + p1);
+>>>
+            Console.WriteLine(Loc.F("配置文件不存在，已自动生成：{0}", p1));
+@@@Program.cs
+<<<
+Console.WriteLine("截图失败: " + ex);
+>>>
+Console.WriteLine(Loc.F("截图失败: {0}", ex));
+@@@Program.cs
+<<<
+Console.WriteLine("对话框布局自检失败: " + ex);
+>>>
+Console.WriteLine(Loc.F("对话框布局自检失败: {0}", ex));
+@@@Program.cs
+<<<
+Console.WriteLine("对话框截图失败: " + ex);
+>>>
+Console.WriteLine(Loc.F("对话框截图失败: {0}", ex));
+@@@Program.cs
+<<<
+                Console.WriteLine("布局自检失败: " + ex);
+>>>
+                Console.WriteLine(Loc.F("布局自检失败: {0}", ex));
+@@@Program.cs
+<<<
+                Console.WriteLine("已生成服务端配置: " + frpsPath);
+                Console.WriteLine("已生成客户端配置: " + frpcPath);
+>>>
+                Console.WriteLine(Loc.F("已生成服务端配置: {0}", frpsPath));
+                Console.WriteLine(Loc.F("已生成客户端配置: {0}", frpcPath));
+@@@Program.cs
+<<<
+                    Console.WriteLine("生成配置失败: " + ex.Message);
+>>>
+                    Console.WriteLine(Loc.F("生成配置失败: {0}", ex.Message));
+@@@Program.cs
+<<<
+                    Console.WriteLine("已保存截图: " + path + "  (" + form.Width + "x" + form.Height + ")");
+>>>
+                    Console.WriteLine(Loc.F("已保存截图: {0}  ({1}x{2})", path, form.Width, form.Height));
+@@@Program.cs
+<<<
+                clients[0].Label + "（主机名 " + clients[0].Hostname + "，IP " + clients[0].ClientIP + "）",
+>>>
+                Loc.F("{0}（主机名 {1}，IP {2}）", clients[0].Label, clients[0].Hostname, clients[0].ClientIP),
+@@@Program.cs
+<<<
+Console.WriteLine("ERR|" + FrpsApi.Describe(ex).Replace("\r\n", " "));
+>>>
+Console.WriteLine("ERR|" + FrpsApi.Describe(ex).Replace("\r\n", " "));

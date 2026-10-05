@@ -1,0 +1,100 @@
+提示：远程端口要在服务端放行。
+Tip: open remote ports on the server.
+公司服务器
+Office server
+家里 NAS
+Home NAS
+测试服务器
+Test server
+    4. 想同时连多个服务端：点“＋ 新添服务器”，给每个服务端填自己的
+    4. To reach several servers at once, click “+ Add server” and give each one its own
+       地址和 token、配自己的代理规则，勾上“启用”即可；日志会带连接名前缀；
+       address, token and proxy rules; tick “Enabled” and each frpc process logs with its own prefix;
+    5. 点“保存并启动客户端”。
+    5. click “Save and Start Client”.
+  其中 frps.toml / frpc.toml / frpc-2.toml … 是自动生成的 frp 配置文件
+  frps.toml and frpc.toml / frpc-2.toml / … are the generated frp config files
+  （frpc.toml 是第 1 个服务端连接，frpc-2.toml 是第 2 个，以此类推），
+  (frpc.toml is server connection #1, frpc-2.toml is #2, and so on);
+  language.txt 记录安装时选的界面语言，
+  language.txt records the interface language chosen during setup;
+泛域名 subDomainHost
+Subdomain host
+导入 frpc 配置
+Import frpc config
+把别的机器上的 frpc.toml 内容粘进下面的框，或者点「选择配置文件」直接挑文件；程序会自动认出里面的服务器地址、token、代理规则和访问者，不用一条条重新填。
+Paste the contents of an frpc.toml from another machine below, or click \"Choose config file...\" to pick one. The server address, token, proxy rules and visitors are recognised automatically, so you do not have to type them in one by one.
+选择配置文件…
+Choose config file...
+读取本机已保存的配置
+Open a saved config on this PC
+清空
+Clear
+还没有内容。
+Nothing here yet.
+新添一个服务端连接
+Add as a new server connection
+并进当前连接「
+Merge into the current connection \"
+导入
+Import
+选择 frpc 配置文件
+Choose an frpc config file
+frp 配置文件 (*.toml;*.ini;*.conf)|*.toml;*.ini;*.conf|所有文件 (*.*)|*.*
+frp config files (*.toml;*.ini;*.conf)|*.toml;*.ini;*.conf|All files (*.*)|*.*
+读取文件失败：{0}
+Failed to read the file: {0}
+读取本机已保存的 frpc 配置
+Open a saved frpc config on this PC
+frp 配置文件 (*.toml)|*.toml|所有文件 (*.*)|*.*
+frp config files (*.toml)|*.toml|All files (*.*)|*.*
+解析失败：{0}
+Could not parse it: {0}
+识别到服务器：{0}:{1}
+Server found: {0}:{1}
+这份配置里没有服务器地址（服务端信息可能写在别的文件里），导入后请自己填。
+This config has no server address (the server settings may live in another file). Please fill it in after importing.
+识别到认证令牌（token），已一并导入。
+Auth token found and imported as well.
+TLS 加密：{0}
+TLS encryption: {0}
+开
+on
+关
+off
+本地管理界面端口：{0}
+Local admin port: {0}
+识别到 {0} 条代理规则、{1} 条访问者。
+Found {0} proxy rules and {1} visitors.
+有 {0} 个界面外的参数（healthCheck、metadatas 之类）会原样保留。
+{0} extra keys that this UI does not cover (healthCheck, metadatas, ...) will be kept as they are.
+（includes 展开了 {0} 个文件）
+(includes expanded into {0} files)
+没有识别到任何代理规则或服务器信息，请确认粘进来的是一份 frpc 配置。
+No proxy rules or server settings were recognised. Please make sure you pasted an frpc config.
+没有识别到可导入的内容。
+There is nothing importable in this content.
+导入配置
+Import config
+导入的服务器 {0}
+Imported server {0}
+导入已中止：上面提示的必填项补齐后再试一次。
+Import cancelled: fill in the required fields shown above and try again.
+已导入为新服务端连接「{0}」：{1} 条代理规则、{2} 条访问者。
+Imported as the new server connection \"{0}\": {1} proxy rules and {2} visitors.
+这份配置里没有服务器地址，请补上「服务器地址」再启动。
+This config has no server address; fill in \"Server address\" before starting.
+已把 {0} 条代理规则、{1} 条访问者并进连接「{2}」。
+Merged {0} proxy rules and {1} visitors into the connection \"{2}\".
+其中 {0} 个界面外的参数已原样保留，生成配置时会照写。
+{0} extra keys outside this UI were kept and will be written back when the config is generated.
+共 {0} 条规则、{1} 条访问者
+{0} rules, {1} visitors
+把别的机器上的 frpc.toml 内容粘进下面的框，或者点「选择配置文件」直接挑文件；
+Paste the contents of an frpc.toml from another machine below, or click \"Choose config file...\" to pick one. 
+程序会自动认出里面的服务器地址、token、代理规则和访问者，不用一条条重新填。
+The server address, token, proxy rules and visitors are recognised automatically, so you do not have to type them in one by one.
+③ 访问者（点此展开）
+③ Visitors (click to expand)
+③ 访问者（点此收起）
+③ Visitors (click to collapse)

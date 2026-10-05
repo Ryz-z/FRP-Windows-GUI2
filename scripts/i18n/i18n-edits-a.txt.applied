@@ -1,0 +1,258 @@
+@@@Json.cs
+<<<
+            if (i < text.Length)
+                throw new FormatException("JSON 末尾有多余内容（位置 " + i + "）");
+>>>
+            if (i < text.Length)
+                throw new FormatException(Loc.F("JSON 末尾有多余内容（位置 {0}）", i));
+@@@Json.cs
+<<<
+                throw new FormatException("无法识别的 JSON 字面量（位置 " + i + "）");
+>>>
+                throw new FormatException(Loc.F("无法识别的 JSON 字面量（位置 {0}）", i));
+@@@Json.cs
+<<<
+                    throw new FormatException("JSON 对象的键必须是字符串（位置 " + i + "）");
+>>>
+                    throw new FormatException(Loc.F("JSON 对象的键必须是字符串（位置 {0}）", i));
+@@@Json.cs
+<<<
+                    throw new FormatException("JSON 对象的键后面缺少 ':'（位置 " + i + "）");
+>>>
+                    throw new FormatException(Loc.F("JSON 对象的键后面缺少 ':'（位置 {0}）", i));
+@@@Json.cs
+<<<
+                throw new FormatException("JSON 对象里出现了意外字符 '" + s[i] + "'（位置 " + i + "）");
+>>>
+                throw new FormatException(Loc.F("JSON 对象里出现了意外字符 '{0}'（位置 {1}）", s[i], i));
+@@@Json.cs
+<<<
+                throw new FormatException("JSON 数组里出现了意外字符 '" + s[i] + "'（位置 " + i + "）");
+>>>
+                throw new FormatException(Loc.F("JSON 数组里出现了意外字符 '{0}'（位置 {1}）", s[i], i));
+@@@Json.cs
+<<<
+                        throw new FormatException("不支持的 JSON 转义 '\\" + e + "'");
+>>>
+                        throw new FormatException(Loc.F("不支持的 JSON 转义 '\\{0}'", e));
+@@@Json.cs
+<<<
+            if (i == start) throw new FormatException("无法识别的 JSON 值（位置 " + start + "）");
+>>>
+            if (i == start) throw new FormatException(Loc.F("无法识别的 JSON 值（位置 {0}）", start));
+@@@Json.cs
+<<<
+                throw new FormatException("无法解析的 JSON 数字：“" + s.Substring(start, i - start) + "”");
+>>>
+                throw new FormatException(Loc.F("无法解析的 JSON 数字：“{0}”", s.Substring(start, i - start)));
+@@@FrpRunner.cs
+<<<
+                throw new FileNotFoundException("找不到可执行文件：" + exePath, exePath);
+>>>
+                throw new FileNotFoundException(Loc.F("找不到可执行文件：{0}", exePath), exePath);
+@@@FrpRunner.cs
+<<<
+                throw new FileNotFoundException("找不到配置文件：" + configPath, configPath);
+>>>
+                throw new FileNotFoundException(Loc.F("找不到配置文件：{0}", configPath), configPath);
+@@@FrpRunner.cs
+<<<
+                Emit("[" + who + "] 进程已退出，退出码 " + code + "。");
+>>>
+                Emit(Loc.F("[{0}] 进程已退出，退出码 {1}。", who, code));
+@@@ServiceManager.cs
+<<<
+            return "未知";
+>>>
+            return Loc.T("未知");
+@@@ServiceManager.cs
+<<<
+            string display = string.Equals(role, "frps", StringComparison.OrdinalIgnoreCase)
+                ? "FrpWin 服务端 (frps)"
+                : "FrpWin 客户端 (frpc)";
+>>>
+            string display = string.Equals(role, "frps", StringComparison.OrdinalIgnoreCase)
+                ? Loc.T("FrpWin 服务端 (frps)")
+                : Loc.T("FrpWin 客户端 (frpc)");
+@@@ServiceManager.cs
+<<<
+            Sc("description", Q(serviceName), Q("FrpWin 内网穿透服务，由 FrpWin 管理器托管，开机自动运行。"));
+>>>
+            Sc("description", Q(serviceName), Q(Loc.T("FrpWin 内网穿透服务，由 FrpWin 管理器托管，开机自动运行。")));
+@@@ServiceManager.cs
+<<<
+            return st.Ok ? "服务已安装并启动。" : ("服务已安装，但启动失败：\n" + st.Output);
+>>>
+            return st.Ok
+                ? Loc.T("服务已安装并启动。")
+                : Loc.F("服务已安装，但启动失败：\n{0}", st.Output);
+@@@ServiceManager.cs
+<<<
+                return "服务未安装，无需卸载。";
+>>>
+                return Loc.T("服务未安装，无需卸载。");
+@@@ServiceManager.cs
+<<<
+            return r.Ok ? "服务已停止并删除。" : r.Output;
+>>>
+            return r.Ok ? Loc.T("服务已停止并删除。") : r.Output;
+@@@Toml.cs
+<<<
+            sb.AppendLine("#  FrpWin 管理器自动生成的 " + role + " 配置文件");
+            sb.AppendLine("#  生成时间: " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+            sb.AppendLine("#  注意: 在 FrpWin 图形界面里点\"保存并启动\"会重新生成并覆盖本文件；");
+            sb.AppendLine("#        想手工调整参数，请改界面里的对应设置，或直接使用 frp 官方命令行。");
+>>>
+            sb.AppendLine(Loc.F("#  FrpWin 管理器自动生成的 {0} 配置文件", role));
+            sb.AppendLine(Loc.F("#  生成时间: {0}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
+            sb.AppendLine(Loc.T("#  注意: 在 FrpWin 图形界面里点\"保存并启动\"会重新生成并覆盖本文件；"));
+            sb.AppendLine(Loc.T("#        想手工调整参数，请改界面里的对应设置，或直接使用 frp 官方命令行。"));
+@@@Toml.cs
+<<<
+            sb.Append(Header("服务端 frps"));
+>>>
+            sb.Append(Header(Loc.T("服务端 frps")));
+@@@Toml.cs
+<<<
+                sb.AppendLine("# 客户端必须使用相同的 token 才能连接");
+>>>
+                sb.AppendLine(Loc.T("# 客户端必须使用相同的 token 才能连接"));
+@@@Toml.cs
+<<<
+                sb.AppendLine("# 管理面板 (Dashboard)，浏览器访问 http://<服务器IP>:" + s.DashboardPort);
+>>>
+                sb.AppendLine(Loc.F("# 管理面板 (Dashboard)，浏览器访问 http://<服务器IP>:{0}", s.DashboardPort));
+@@@Toml.cs
+<<<
+            sb.Append(Header(string.IsNullOrEmpty(label) ? "客户端 frpc" : "客户端 frpc - " + label));
+>>>
+            sb.Append(Header(Loc.T("客户端 frpc") + (string.IsNullOrEmpty(label) ? "" : " - " + label)));
+@@@Toml.cs
+<<<
+            sb.AppendLine("# 与服务端之间的连接启用 TLS 加密");
+>>>
+            sb.AppendLine(Loc.T("# 与服务端之间的连接启用 TLS 加密"));
+@@@Toml.cs
+<<<
+                sb.AppendLine("# frpc 自带的管理界面 http://127.0.0.1:" + c.AdminPort);
+>>>
+                sb.AppendLine(Loc.F("# frpc 自带的管理界面 http://127.0.0.1:{0}", c.AdminPort));
+@@@FrpsApi.cs
+<<<
+            if (LocalPort > 0)
+                return "转发到内网 " + (string.IsNullOrEmpty(LocalIP) ? "127.0.0.1" : LocalIP) + ":" + LocalPort;
+            if (Domains.Count > 0) return "域名 " + string.Join(",", Domains.ToArray());
+            if (!string.IsNullOrEmpty(Subdomain)) return "子域名 " + Subdomain;
+            return "转发到该客户端的内网服务";
+>>>
+            if (LocalPort > 0)
+                return Loc.F("转发到内网 {0}:{1}", string.IsNullOrEmpty(LocalIP) ? "127.0.0.1" : LocalIP, LocalPort);
+            if (Domains.Count > 0) return Loc.F("域名 {0}", string.Join(",", Domains.ToArray()));
+            if (!string.IsNullOrEmpty(Subdomain)) return Loc.F("子域名 {0}", Subdomain);
+            return Loc.T("转发到该客户端的内网服务");
+@@@FrpsApi.cs
+<<<
+            if (ex == null) return "未知错误";
+>>>
+            if (ex == null) return Loc.T("未知错误");
+@@@FrpsApi.cs
+<<<
+                    if (code == 401 || code == 403)
+                        return "Dashboard 拒绝了访问（HTTP " + code + "）：用户名或密码不对。\r\n" +
+                               "请在“服务端”标签页里核对 Dashboard 用户名 / 密码。";
+                    if (code == 404)
+                        return "Dashboard 里没有这个接口（HTTP 404）：这个 frps 版本可能太老，缺少 /api/clients。";
+                    return "Dashboard 返回 HTTP " + code + " " + resp.StatusDescription + "。";
+>>>
+                    if (code == 401 || code == 403)
+                        return Loc.F("Dashboard 拒绝了访问（HTTP {0}）：用户名或密码不对。\r\n" +
+                                     "请在“服务端”标签页里核对 Dashboard 用户名 / 密码。", code);
+                    if (code == 404)
+                        return Loc.T("Dashboard 里没有这个接口（HTTP 404）：这个 frps 版本可能太老，缺少 /api/clients。");
+                    return Loc.F("Dashboard 返回 HTTP {0} {1}。", code, resp.StatusDescription);
+@@@FrpsApi.cs
+<<<
+                    case WebExceptionStatus.ConnectFailure:
+                        return "连接不上 Dashboard（连接被拒绝）。\r\n" +
+                               "请确认：① 服务端已启动；② “Dashboard 端口”填了大于 0 的端口并已保存生效；\r\n" +
+                               "③ Windows 防火墙没有拦住本机回环地址。";
+                    case WebExceptionStatus.Timeout:
+                        return "连接 Dashboard 超时。请确认服务端正在运行，且 Dashboard 端口没有被别的程序占用。";
+                    case WebExceptionStatus.NameResolutionFailure:
+                        return "Dashboard 地址解析失败：" + _SafeHost(ex);
+                    default:
+                        return "访问 Dashboard 失败：" + web.Message;
+>>>
+                    case WebExceptionStatus.ConnectFailure:
+                        return Loc.T("连接不上 Dashboard（连接被拒绝）。\r\n" +
+                                     "请确认：① 服务端已启动；② “Dashboard 端口”填了大于 0 的端口并已保存生效；\r\n" +
+                                     "③ Windows 防火墙没有拦住本机回环地址。");
+                    case WebExceptionStatus.Timeout:
+                        return Loc.T("连接 Dashboard 超时。请确认服务端正在运行，且 Dashboard 端口没有被别的程序占用。");
+                    case WebExceptionStatus.NameResolutionFailure:
+                        return Loc.F("Dashboard 地址解析失败：{0}", _SafeHost(ex));
+                    default:
+                        return Loc.F("访问 Dashboard 失败：{0}", web.Message);
+@@@FrpsApi.cs
+<<<
+            var io = ex as IOException;
+            if (io != null) return "读取 Dashboard 数据失败：" + io.Message;
+
+            if (ex is FormatException) return "Dashboard 返回的内容不是合法 JSON：" + ex.Message;
+>>>
+            var io = ex as IOException;
+            if (io != null) return Loc.F("读取 Dashboard 数据失败：{0}", io.Message);
+
+            // Json 解析器抛出来的消息本身也可能带中文，这里按整串再翻一次
+            if (ex is FormatException)
+                return Loc.F("Dashboard 返回的内容不是合法 JSON：{0}", Loc.Whole(ex.Message));
+@@@Firewall.cs
+<<<
+                if (log != null)
+                {
+                    log("防火墙：" + (result.Ok ? "已放行 " : "放行失败 ") + rule.DisplayName +
+                        "  规则名 " + rule.RuleName +
+                        (result.Ok ? "" : "  " + result.Error));
+                }
+>>>
+                if (log != null)
+                {
+                    log(result.Ok
+                        ? Loc.F("防火墙：已放行 {0}  规则名 {1}", rule.DisplayName, rule.RuleName)
+                        : Loc.F("防火墙：放行失败 {0}  规则名 {1}  {2}", rule.DisplayName, rule.RuleName, result.Error));
+                }
+@@@Firewall.cs
+<<<
+            return "netsh 退出码 " + code;
+>>>
+            return Loc.F("netsh 退出码 {0}", code);
+@@@Firewall.cs
+<<<
+                stderr = "netsh 执行超时";
+>>>
+                stderr = Loc.T("netsh 执行超时");
+@@@Firewall.cs
+<<<
+                        Note = (p.IsOnline ? "在线" : "离线") + " · " + p.TargetText()
+>>>
+                        Note = Loc.T(p.IsOnline ? "在线" : "离线") + " · " + p.TargetText()
+@@@Firewall.cs
+<<<
+                sb.Append("另有 ");
+                sb.Append(skipped.Count);
+                sb.Append(" 个代理不占用服务端独立端口：");
+                sb.Append(string.Join("、", skipped.ToArray()));
+                sb.Append("。http/https 走服务端的虚拟主机端口，可用“放行防火墙端口”统一放行；");
+                sb.Append("stcp/xtcp/sudp 是点对点穿透，不需要在服务端开端口。");
+>>>
+                sb.Append(Loc.F("另有 {0} 个代理不占用服务端独立端口：{1}。",
+                    skipped.Count, string.Join("、", skipped.ToArray())));
+                sb.Append(Loc.T("http/https 走服务端的虚拟主机端口，可用“放行防火墙端口”统一放行；"));
+                sb.Append(Loc.T("stcp/xtcp/sudp 是点对点穿透，不需要在服务端开端口。"));
+@@@Firewall.cs
+<<<
+                sb.Append("标“离线”的端口来自客户端上一次连接的记录——它现在没在线，放行了暂时也用不上，");
+                sb.Append("但不影响其它端口。");
+>>>
+                sb.Append(Loc.T("标“离线”的端口来自客户端上一次连接的记录——它现在没在线，放行了暂时也用不上，"));
+                sb.Append(Loc.T("但不影响其它端口。"));

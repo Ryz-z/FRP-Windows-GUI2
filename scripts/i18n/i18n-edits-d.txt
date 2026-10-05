@@ -1,0 +1,154 @@
+@@@MainFormClient.cs
+<<<
+                Warn("保存配置失败：\r\n" + ex.Message);
+>>>
+                Warn(Loc.F("保存配置失败：\r\n{0}", ex.Message));
+@@@MainFormClient.cs
+<<<
+                Warn("找不到 frps.exe：\r\n" + AppPaths.FrpsExe + "\r\n\r\n请重新运行安装程序。");
+>>>
+                Warn(Loc.F("找不到 frps.exe：\r\n{0}\r\n\r\n请重新运行安装程序。", AppPaths.FrpsExe));
+@@@MainFormClient.cs
+<<<
+                _serverRunner.Start("frps", AppPaths.FrpsExe, AppPaths.FrpsConfig, AppPaths.InstallDir, null);
+                AppendLog(_sLog, "已启动 frps（PID " + _serverRunner.ProcessId + "）。");
+                AppendLog(_sLog, "若这是一台有公网 IP 的服务器，请记得用“放行防火墙端口”开放 " + _sBindPort.Text + " 端口。");
+>>>
+                _serverRunner.Start("frps", AppPaths.FrpsExe, AppPaths.FrpsConfig, AppPaths.InstallDir, null);
+                AppendLog(_sLog, Loc.F("已启动 frps（PID {0}）。", _serverRunner.ProcessId));
+                AppendLog(_sLog, Loc.F("若这是一台有公网 IP 的服务器，请记得用“放行防火墙端口”开放 {0} 端口。", _sBindPort.Text));
+@@@MainFormClient.cs
+<<<
+                Warn("启动 frps 失败：\r\n" + ex.Message);
+>>>
+                Warn(Loc.F("启动 frps 失败：\r\n{0}", ex.Message));
+@@@MainFormClient.cs
+<<<
+                Warn("找不到 frpc.exe：\r\n" + AppPaths.FrpcExe + "\r\n\r\n请重新运行安装程序。");
+>>>
+                Warn(Loc.F("找不到 frpc.exe：\r\n{0}\r\n\r\n请重新运行安装程序。", AppPaths.FrpcExe));
+@@@MainFormClient.cs
+<<<
+                Warn("所有服务端连接都是「未启用」状态，没有可以启动的。\r\n\r\n" +
+                     "请在「连接设置」里选中一个连接并勾上「启用这个连接」。");
+>>>
+                Warn(Loc.T("所有服务端连接都是「未启用」状态，没有可以启动的。\r\n\r\n") +
+                     Loc.T("请在「连接设置」里选中一个连接并勾上「启用这个连接」。"));
+@@@ClientFirewallForms.cs
+<<<
+            hint.Text = "这里的地址/账号对应“服务端”标签页里的 Dashboard 端口、用户名、密码；" +
+                        "先保存并启动服务端，再点“重新读取”，下面就会列出所有连上来的客户端。";
+>>>
+            hint.Text = Loc.T("这里的地址/账号对应“服务端”标签页里的 Dashboard 端口、用户名、密码；") +
+                        Loc.T("先保存并启动服务端，再点“重新读取”，下面就会列出所有连上来的客户端。");
+@@@ClientFirewallForms.cs
+<<<
+            _status.Text = "（测试数据）共 " + _rows.Count + " 个客户端。";
+>>>
+            _status.Text = Loc.F("（测试数据）共 {0} 个客户端。", _rows.Count);
+@@@ClientFirewallForms.cs
+<<<
+            _status.Text = "正在读取 " + _txtHost.Text.Trim() + ":" + port + " …";
+>>>
+            _status.Text = Loc.F("正在读取 {0}:{1} …", _txtHost.Text.Trim(), port);
+@@@ClientFirewallForms.cs
+<<<
+                _status.Text = "连接成功：frps " + (string.IsNullOrEmpty(version) ? "(未知版本)" : version) +
+                               "，读到 " + _rows.Count + " 个客户端、" + _proxies.Count + " 条代理规则。" +
+                               (ServiceManager.IsAdministrator ? "" : "  当前不是管理员，最后一步“一键开启”会提示以管理员身份重启。");
+>>>
+                _status.Text = Loc.F("连接成功：frps {0}，读到 {1} 个客户端、{2} 条代理规则。",
+                                     string.IsNullOrEmpty(version) ? Loc.T("(未知版本)") : version,
+                                     _rows.Count, _proxies.Count) +
+                               (ServiceManager.IsAdministrator
+                                    ? ""
+                                    : Loc.T("  当前不是管理员，最后一步“一键开启”会提示以管理员身份重启。"));
+@@@ClientFirewallForms.cs
+<<<
+                    _log("已从 Dashboard 读取到 " + _rows.Count + " 个客户端、" + _proxies.Count + " 条代理规则。");
+>>>
+                    _log(Loc.F("已从 Dashboard 读取到 {0} 个客户端、{1} 条代理规则。", _rows.Count, _proxies.Count));
+@@@ClientFirewallForms.cs
+<<<
+                _status.Text = "读取失败：" + FrpsApi.Describe(ex);
+
+                if (_log != null) _log("读取 frps Dashboard 失败：" + FrpsApi.Describe(ex).Replace("\r\n", " "));
+>>>
+                _status.Text = Loc.F("读取失败：{0}", FrpsApi.Describe(ex));
+
+                if (_log != null) _log(Loc.F("读取 frps Dashboard 失败：{0}", FrpsApi.Describe(ex).Replace("\r\n", " ")));
+@@@ClientFirewallForms.cs
+<<<
+                _status.Text = "Dashboard 端口必须是 1~65535 的数字。";
+>>>
+                _status.Text = Loc.T("Dashboard 端口必须是 1~65535 的数字。");
+@@@ClientFirewallForms.cs
+<<<
+title = title + "（主机名 " + row.Client.Hostname + "）";
+>>>
+title = Loc.F("{0}（主机名 {1}）", title, row.Client.Hostname);
+@@@ClientFirewallForms.cs
+<<<
+                title = title + "（IP " + row.Client.ClientIP + "）";
+>>>
+                title = Loc.F("{0}（IP {1}）", title, row.Client.ClientIP);
+@@@ClientFirewallForms.cs
+<<<
+            info.Text = "客户端：" + (clientTitle ?? "") +
+                        "　—— 下面是这个客户端在服务端上占用的端口，勾选要放行的，再点最下面的按钮。";
+>>>
+            info.Text = Loc.F("客户端：{0}　—— 下面是这个客户端在服务端上占用的端口，勾选要放行的，再点最下面的按钮。",
+                              clientTitle ?? "");
+@@@ClientFirewallForms.cs
+<<<
+                entry == null ? "手工添加：填端口号，选 TCP/UDP" : entry.Note,
+>>>
+                entry == null ? Loc.T("手工添加：填端口号，选 TCP/UDP") : entry.Note,
+@@@ClientFirewallForms.cs
+<<<
+                if (_count != null) _count.Text = "已勾选 " + on + " / " + total + " 个端口";
+>>>
+                if (_count != null) _count.Text = Loc.F("已勾选 {0} / {1} 个端口", on, total);
+@@@ClientFirewallForms.cs
+<<<
+                    bad.Add("第 " + (row.Index + 1) + " 行“" + entry.PortText + "”");
+>>>
+                    bad.Add(Loc.F("第 {0} 行“{1}”", row.Index + 1, entry.PortText));
+@@@ClientFirewallForms.cs
+<<<
+                MainForm.Warn("下面这些行的端口不是 1~65535 的数字，请先改正（或取消勾选）：\r\n\r\n" +
+                              string.Join("\r\n", bad.ToArray()));
+>>>
+                MainForm.Warn(Loc.F("下面这些行的端口不是 1~65535 的数字，请先改正（或取消勾选）：\r\n\r\n{0}",
+                                    string.Join("\r\n", bad.ToArray())));
+@@@ClientFirewallForms.cs
+<<<
+            _status.Text = "处理完成：成功 " + ok + " 条，失败 " + fail + " 条（共 " + results.Count + " 条规则）。" +
+                           (fail == 0 ? "可以继续改勾选再点一次，规则不会重复堆积。" : "失败原因见“运行日志”。");
+>>>
+            _status.Text = Loc.F("处理完成：成功 {0} 条，失败 {1} 条（共 {2} 条规则）。", ok, fail, results.Count) +
+                           (fail == 0
+                                ? Loc.T("可以继续改勾选再点一次，规则不会重复堆积。")
+                                : Loc.T("失败原因见“运行日志”。"));
+@@@ClientFirewallForms.cs
+<<<
+            msg.AppendLine("已在 Windows 防火墙中处理 " + results.Count + " 条规则：成功 " + ok + " 条，失败 " + fail + " 条。");
+            msg.AppendLine();
+            msg.AppendLine("方向：" + (inbound && outbound ? "进站 + 出站" : (inbound ? "进站" : "出站")));
+            msg.AppendLine("规则名：FrpWin Client <端口> <TCP|UDP> <IN|OUT>");
+            msg.AppendLine();
+            msg.Append("可以在“Windows 防火墙 → 高级安全 → 入站规则 / 出站规则”里查看效果。");
+>>>
+            msg.AppendLine(Loc.F("已在 Windows 防火墙中处理 {0} 条规则：成功 {1} 条，失败 {2} 条。",
+                                 results.Count, ok, fail));
+            msg.AppendLine();
+            msg.AppendLine(Loc.F("方向：{0}", inbound && outbound
+                ? Loc.T("进站 + 出站") : (inbound ? Loc.T("进站") : Loc.T("出站"))));
+            msg.AppendLine(Loc.T("规则名：FrpWin Client <端口> <TCP|UDP> <IN|OUT>"));
+            msg.AppendLine();
+            msg.Append(Loc.T("可以在“Windows 防火墙 → 高级安全 → 入站规则 / 出站规则”里查看效果。"));
+@@@ClientFirewallForms.cs
+<<<
+            _status.Text = "规则名统一为 “FrpWin Client <端口> <TCP|UDP> <IN|OUT>”，可以在 “Windows 防火墙 → 高级安全” 里查看或删除。";
+>>>
+            _status.Text = Loc.T("规则名统一为 “FrpWin Client <端口> <TCP|UDP> <IN|OUT>”，可以在 “Windows 防火墙 → 高级安全” 里查看或删除。");

@@ -1,0 +1,94 @@
+@@@MainForm.cs
+<<<
+            AppendLog(_sLog, "FrpWin 已就绪。");
+            AppendLog(_sLog, "程序目录: " + AppPaths.InstallDir);
+            AppendLog(_sLog, "数据目录: " + AppPaths.DataDir + "  (配置文件与日志都在这里)");
+>>>
+            AppendLog(_sLog, Loc.T("FrpWin 已就绪。"));
+            AppendLog(_sLog, Loc.F("程序目录: {0}", AppPaths.InstallDir));
+            AppendLog(_sLog, Loc.F("数据目录: {0}  (配置文件与日志都在这里)", AppPaths.DataDir));
+@@@MainForm.cs
+<<<
+2000, "FrpWin 仍在后台运行",
+>>>
+2000, Loc.T("FrpWin 仍在后台运行"),
+@@@MainForm.cs
+<<<
+"frp 进程继续运行中。双击托盘图标可重新打开窗口。", ToolTipIcon.Info);
+>>>
+Loc.T("frp 进程继续运行中。双击托盘图标可重新打开窗口。"), ToolTipIcon.Info);
+@@@MainForm.cs
+<<<
+            catch (Exception ex) { Warn("无法打开目录：" + ex.Message); }
+>>>
+            catch (Exception ex) { Warn(Loc.F("无法打开目录：{0}", ex.Message)); }
+@@@MainForm.cs
+<<<
+                if (!File.Exists(path)) { Warn("文件还不存在，请先保存配置：\r\n" + path); return; }
+>>>
+                if (!File.Exists(path)) { Warn(Loc.F("文件还不存在，请先保存配置：\r\n{0}", path)); return; }
+@@@MainForm.cs
+<<<
+            catch (Exception ex) { Warn("无法打开文件：" + ex.Message); }
+>>>
+            catch (Exception ex) { Warn(Loc.F("无法打开文件：{0}", ex.Message)); }
+@@@MainForm.cs
+<<<
+            AppendLog(_sLog, "防火墙规则处理完成：成功 " + ok + " 条，失败 " + fail + " 条。端口：" + string.Join(", ", ports.ConvertAll(x => x.ToString()).ToArray()));
+            Info("已在 Windows 防火墙中放行以下端口：\r\n\r\n" + string.Join(", ", ports.ConvertAll(x => x.ToString()).ToArray()) +
+                 "\r\n\r\n成功 " + ok + " 条规则" + (fail > 0 ? "，失败 " + fail + " 条（可能已存在同名规则）" : "") + "。");
+>>>
+            string portList = string.Join(", ", ports.ConvertAll(x => x.ToString()).ToArray());
+            AppendLog(_sLog, Loc.F("防火墙规则处理完成：成功 {0} 条，失败 {1} 条。端口：{2}", ok, fail, portList));
+            Info(Loc.F("已在 Windows 防火墙中放行以下端口：\r\n\r\n{0}\r\n\r\n成功 {1} 条规则{2}。",
+                 portList, ok,
+                 fail > 0 ? Loc.F("，失败 {0} 条（可能已存在同名规则）", fail) : ""));
+@@@MainForm.cs
+<<<
+                Warn("要列出“哪些客户端连上来了”，FrpWin 需要读取 frps 的 Dashboard 管理接口。\r\n\r\n" +
+                     "请先在“Dashboard 端口”里填一个大于 0 的端口（例如 7500），\r\n" +
+                     "然后点“保存并启动服务端”，再回来点这个按钮。");
+>>>
+                Warn(Loc.T("要列出“哪些客户端连上来了”，FrpWin 需要读取 frps 的 Dashboard 管理接口。\r\n\r\n") +
+                     Loc.T("请先在“Dashboard 端口”里填一个大于 0 的端口（例如 7500），\r\n") +
+                     Loc.T("然后点“保存并启动服务端”，再回来点这个按钮。"));
+@@@MainForm.cs
+<<<
+            AppendLog(_sLog, "打开“一键放行客户端端口”，Dashboard = http://127.0.0.1:" + dashPort);
+>>>
+            AppendLog(_sLog, Loc.F("打开“一键放行客户端端口”，Dashboard = http://127.0.0.1:{0}", dashPort));
+@@@MainForm.cs
+<<<
+            _sStatusLabel.Text = "服务状态：" + srvSvc + "   |   界面进程：" + (srvRun ? "运行中 (PID " + _serverRunner.ProcessId + ")" : "未运行");
+>>>
+            _sStatusLabel.Text = Loc.F("服务状态：{0}   |   界面进程：{1}", srvSvc,
+                srvRun ? Loc.F("运行中 (PID {0})", _serverRunner.ProcessId) : Loc.T("未运行"));
+@@@MainForm.cs
+<<<
+            _cStatusLabel.Text = "服务状态：" + cliSvc + "   |   界面进程：" + cliProc;
+>>>
+            _cStatusLabel.Text = Loc.F("服务状态：{0}   |   界面进程：{1}", cliSvc, cliProc);
+@@@MainForm.cs
+<<<
+                _statusLabelCommon.Text = "frps 服务：" + srvSvc + "    frpc 服务：" + cliSvc +
+                                          "    数据目录：" + AppPaths.DataDir;
+>>>
+                _statusLabelCommon.Text = Loc.F("frps 服务：{0}    frpc 服务：{1}    数据目录：{2}",
+                    srvSvc, cliSvc, AppPaths.DataDir);
+@@@MainForm.cs
+<<<
+            _sProcLabel.Text = File.Exists(AppPaths.FrpsExe) ? "" : "⚠ 未找到 frps.exe，请重新安装。";
+            _cProcLabel.Text = File.Exists(AppPaths.FrpcExe) ? "" : "⚠ 未找到 frpc.exe，请重新安装。";
+>>>
+            _sProcLabel.Text = File.Exists(AppPaths.FrpsExe) ? "" : Loc.T("⚠ 未找到 frps.exe，请重新安装。");
+            _cProcLabel.Text = File.Exists(AppPaths.FrpcExe) ? "" : Loc.T("⚠ 未找到 frpc.exe，请重新安装。");
+@@@MainForm.cs
+<<<
+                Warn(name + " 必须是数字，当前填写的是：“" + raw + "”");
+>>>
+                Warn(Loc.F("{0} 必须是数字，当前填写的是：“{1}”", name, raw));
+@@@MainForm.cs
+<<<
+                Warn(name + " 必须在 " + min + " ~ " + max + " 之间，当前为 " + value + "。");
+>>>
+                Warn(Loc.F("{0} 必须在 {1} ~ {2} 之间，当前为 {3}。", name, min, max, value));

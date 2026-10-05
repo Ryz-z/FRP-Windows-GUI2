@@ -1,0 +1,20 @@
+# 统一按文本处理，检出时用 CRLF（这是 Windows 专用项目）
+# 说明：仓库内部存 LF，检出到工作区自动转 CRLF；文件开头的 UTF-8 BOM 不受影响
+* text=auto eol=crlf
+
+# 二进制文件不做换行转换
+*.png binary
+*.jpg binary
+*.ico binary
+*.exe binary
+*.dll binary
+*.zip binary
+
+# 这些文件带 UTF-8 BOM，而且内容会进安装包并参与 SHA256 校验，
+# 所以原样存取，禁止 Git 做换行归一化（否则工作区字节和仓库字节会不一致）。
+*.txt -text
+*.iss -text
+*.ps1 -text
+
+# 翻译表是「一行一条」的清单，换行符属于数据本身，也不许归一化
+scripts/i18n/*.txt -text

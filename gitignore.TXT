@@ -1,0 +1,35 @@
+# 构建产物与第三方内容（不入版本库，由脚本生成）
+dist/
+发版附件（Release）/
+build/staging/
+build/output/
+build/runmode/
+build/e2e/
+build/i18n/
+build/fw/
+build/import/
+build/probe/
+build/testinstall/
+build/docs/
+third_party/
+tools/
+
+# .NET 编译中间产物
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+.vs/
+
+# 运行时产生的文件
+*.log
+*.tmp
+build/*.txt
+build/*.png
+build/*.bak
+!build/staging-src/**
+
+# 系统文件
+Thumbs.db
+desktop.ini
+.DS_Store

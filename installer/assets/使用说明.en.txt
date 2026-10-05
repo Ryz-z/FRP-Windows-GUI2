@@ -1,0 +1,275 @@
+﻿======================================================================
+              FrpWin Tunnel Kit  v1.0.0  (fourth build)
+                       Windows x64
+======================================================================
+
+1. What this is
+----------------------------------------------------------------------
+FrpWin packages frp (https://github.com/fatedier/frp) into native
+Windows programs. After installing you get three files:
+
+  FrpWin.exe   the GUI manager: configure and start/stop everything
+               (there is a desktop shortcut for it)
+  frps.exe     the server; runs on the machine with a public IP
+  frpc.exe     the client; runs on the LAN machine you want to reach
+
+Compared with using the official command line version, this kit adds:
+  · A full graphical interface (Chinese or English), so you never have
+    to hand-write a config file
+  · One-click install of frps / frpc as a Windows service: starts at
+    boot and restarts automatically if it crashes
+  · One-click firewall rules
+  · One-click client ports: reads back which clients are connected and
+    which ports they occupy, then opens those ports in Windows Firewall
+  · One client can talk to several servers at once: click "+ Add server"
+    under Connection and give each server its own address, token and
+    proxy rules, completely independent of each other
+  · A live run log
+  · A built-in web dashboard on the server side (see who is connected
+    and how much traffic they use, straight from a browser)
+
+
+2. Up and running in five minutes
+----------------------------------------------------------------------
+[Step 1] On the machine with a public IP, configure the server
+
+  1. Run setup.exe, then double-click "FrpWin" on the desktop;
+  2. switch to the "Server (frps)" tab;
+  3. leave "Bind port" at 7000 unless you have a reason to change it;
+  4. set "Auth token" to a long random string and write it down -
+     the clients must use exactly the same one;
+  5. make sure "Dashboard port" is not 0 (7500 by default) and change
+     the dashboard user / password;
+  6. click "Save and Start Server";
+  7. click "Open firewall ports" so 7000 (and the dashboard port) can be
+     reached from the outside;
+  8. for long-term use click "Install as Windows Service".
+
+  Tell the clients the server's public IP and the token.
+
+[Step 2] On the LAN machine, configure the client
+
+  1. Install and open FrpWin, switch to the "Client (frpc)" tab;
+  2. set "Server address" to the server's public IP and "Server port"
+     to 7000;
+  3. set "Auth token" to exactly the same string as on the server;
+  4. add a row in the proxy table, for example to reach Remote Desktop:
+        Name = rdp          Type = tcp
+        Local IP = 127.0.0.1   Local port = 3389   Remote port = 13389
+  5. click "Save and Start Client".
+
+  To reach a second (or third) server from the same client:
+  6. click "+ Add server" at the right end of the "Connection" row; a new
+     connection appears in the drop-down;
+  7. rename it ("Rename", e.g. "office" or "home NAS"), fill in that
+     server's own address, port and token, and add its own proxy rules
+     in the table below;
+  8. only connections with "Enabled" ticked are started. Click
+     "Save and Start Client" once and FrpWin launches one frpc process
+     per enabled connection - each talking to its own server, with its
+     own config file. Every log line is prefixed with the connection
+     name so you can tell them apart.
+
+[Step 3] Back on the server: open the ports this client needs
+
+  1. On the server's FrpWin, "Server" tab, click "Open client ports";
+  2. the window lists every connected client (name, host, IP, version
+     and the ports it needs). Pick one and click "Next: pick ports";
+  3. the second window lists the ports that client occupies, all ticked
+     by default:
+        · "Select all" ticks or unticks everything at once
+        · "Direction" lets you choose inbound, outbound, or both
+        · "+ Add port" adds a port by hand
+  4. click "Open the firewall ports now" and the rules take effect
+     immediately.
+
+[Step 4] Use it
+
+  From any machine with internet access, connect Remote Desktop to
+        <server-public-ip>:13389
+  and you land on port 3389 of the LAN machine.
+
+
+3. How to fill in the common scenarios
+----------------------------------------------------------------------
+[Remote Desktop / SSH / databases and other TCP services]
+  Type tcp, local port = the service port (3389 / 22 / 3306), remote
+  port = any free port you like.
+
+[Web sites (HTTP)]
+  Set "HTTP vhost port" on the server first (for example 80).
+  On the client choose type http, local port = the web server port
+  (usually 80), and put your domain in "Custom domains".
+  Then point that domain's A record at the server's public IP.
+
+[UDP services (DNS, some games)]
+  Choose type udp; everything else is the same as tcp.
+
+[Without exposing a public port (peer-to-peer)]
+  Use stcp: choose type stcp on the client, a secretKey is generated for
+  you. The visiting side adds a row in the Visitors table with the same
+  serverName and secretKey, then connects to 127.0.0.1:<bind port>.
+  If a suitable NAT is available, switch stcp to xtcp for a direct
+  connection that skips the server.
+
+
+4. About ports
+----------------------------------------------------------------------
+  7000       control port between frps and frpc - must be opened
+  7500       frps web dashboard: http://<server-ip>:7500
+  13389 etc. the "remote ports" you set in the proxy rules; every one of
+             them has to be opened on the server
+
+  There are three ways to open ports:
+
+  (1) "Server" tab -> "Open firewall ports" (the server's own ports)
+      Opens bindPort, the KCP port, the HTTP/HTTPS vhost ports and the
+      dashboard port in one go (TCP + UDP, inbound).
+
+  (2) "Server" tab -> "Open client ports" (the ports clients need)
+      Reads frps' live dashboard, so the server must be running and
+      "Dashboard port" must be greater than 0, and the dashboard user /
+      password must match. Pick a client, tick the ports it occupies,
+      choose inbound / outbound / both, and click the button.
+      Rules are named "FrpWin Client <port> <TCP|UDP> <IN|OUT>".
+      http/https use the server's vhost ports (use method 1) and
+      stcp/xtcp/sudp are peer-to-peer and take no server port.
+
+  (3) By hand: Control Panel -> Windows Defender Firewall -> Advanced
+      settings -> Inbound Rules -> New Rule.
+
+  Note for cloud servers (Aliyun / Tencent Cloud / Huawei Cloud ...):
+  besides the Windows firewall you also have to open the same ports in
+  the provider's security group.
+
+
+5. Security notes (important)
+----------------------------------------------------------------------
+  1. Always use a strong token. Without one, or with a weak one, anyone
+     can relay traffic through your server - and you pay for it.
+  2. Do not expose the frps bind port to the whole internet; restrict it
+     to the sources you trust.
+  3. The dashboard defaults to admin/admin - change it, or set the
+     dashboard port to 0 to turn it off (note that "Open client ports"
+     then has nothing to read).
+  4. This program collects nothing. All configuration and logs stay on
+     your own machine.
+
+
+6. Where things live
+----------------------------------------------------------------------
+  Program folder:  C:\Program Files\FrpWin\
+                   FrpWin.exe / frps.exe / frpc.exe / README.en.txt
+
+  Data folder:     C:\ProgramData\FrpWin\
+                   frps.toml        server config (generated by the GUI)
+                   frpc.toml        config of server connection #1
+                   frpc-2.toml      config of server connection #2, ...
+                   language.txt     the language chosen at install time
+                   ui-settings.xml  this GUI's settings
+                   logs\            logs when running as a service
+
+  Click "Open data folder" in the GUI to jump straight there.
+
+
+7. Frequently asked questions
+----------------------------------------------------------------------
+  Q: The client never connects to the server.
+  A: Check in order: (1) is the server's public IP right; (2) is the
+     token byte-for-byte identical on both sides; (3) is port 7000 open
+     in the firewall AND in the cloud security group (opening the
+     Windows firewall alone is not enough on a cloud box); (4) is the
+     server actually running.
+
+  Q: The client says it logged in, but nobody can reach the mapped port.
+  A: The control port works but the "remote port" is not open. Go to the
+     server, click "Open client ports", pick that client and tick its
+     ports.
+
+  Q: "Open client ports" says it cannot reach the dashboard.
+  A: frps is not running, or the dashboard is off. Check: (1) you clicked
+     "Save and Start Server"; (2) "Dashboard port" is greater than 0
+     (7500 by default) and has been saved; (3) the address in the dialog
+     is 127.0.0.1 and the port / account match the Server tab. You can
+     retry any time with "Reload".
+
+  Q: It says the dashboard refused the request (HTTP 401).
+  A: Wrong user name or password. Fix them on the "Server" tab, click
+     "Save and Start Server", then "Reload" in the dialog.
+
+  Q: One client, several servers - how?
+  A: "Client" tab -> "Connection" -> "+ Add server". Rename it, fill in
+     its own address and token, add its own proxy rules, tick "Enabled",
+     then "Save and Start Client". Each connection gets its own frpc
+     process and its own config file (frpc.toml, frpc-2.toml, ...).
+
+  Q: How do I change the interface language?
+  A: The language you chose in setup is the default. Afterwards, open the
+     "Help / About" tab, pick "Follow the installer / 中文 / English"
+     under "Language", click "Save language" and restart FrpWin.
+
+  Q: Opening ports asks for administrator rights.
+  A: Changing the Windows firewall requires elevation. Answer "Yes" to
+     restart FrpWin as administrator and click the button again.
+
+  Q: How do I uninstall?
+  A: Control Panel -> Programs and Features -> FrpWin -> Uninstall. It
+     stops and deletes the related Windows services and cleans up the
+     firewall rules it created; your configuration and logs stay in
+     C:\ProgramData\FrpWin. Rules named "FrpWin Client ..." are not
+     removed automatically - delete them in Windows Firewall -> Advanced
+     settings if you want them gone.
+
+  Q: How do I use the portable build?
+  A: Put the three exe files in one folder and double-click FrpWin.exe.
+     Settings are written to C:\ProgramData\FrpWin (or to your user
+     folder if that is not writable).
+
+
+8. What's new in the fourth build
+----------------------------------------------------------------------
+  · The English module is complete: choose English in setup and the
+    whole interface, every message and the comments in the generated
+    config files are English. You can also switch language later from
+    the "Help / About" tab.
+  · One client, many servers: "+ Add server" under Connection. Each
+    connection has its own address, token, TLS setting, proxy rules and
+    visitors, and each one runs as its own frpc process. Log lines are
+    prefixed with the connection name.
+  · A taller proxy-rules table: nine or more rules are visible at once.
+    The "③ Visitors" box is only needed for stcp / xtcp peer-to-peer
+    tunnels, so it is now collapsible - click it to expand and the proxy
+    table gets all the height back when it is collapsed.
+  · New "Import config": paste the contents of an frpc.toml (or an older
+    frpc.ini) from another machine and FrpWin recognises the server
+    address, token, proxy rules and visitors for you. Choose "Add as a
+    new server connection" or "Merge into the current connection" - no
+    more retyping. Keys this UI does not cover (healthCheck, metadatas,
+    ...) are kept as they are.
+
+  How to import a config:
+    1. "Client" tab -> in the "② Proxy rules" row click "Import config";
+    2. click "Choose config file..." and pick an frpc.toml, or simply
+       paste the config text into the box - it is parsed as you type;
+    3. the summary below shows "Server found: x.x.x.x:7000" and how many
+       proxy rules were recognised;
+    4. pick "Add as a new server connection" or "Merge into the current
+       connection" and click "Import";
+    5. click "Save and Start Client".
+
+  (Third build added "Open client ports", with per-port ticking and an
+   inbound / outbound / both choice.)
+
+
+9. License
+----------------------------------------------------------------------
+  frp is by fatedier and licensed under the Apache License 2.0:
+  https://github.com/fatedier/frp
+  This Windows front end is licensed under Apache-2.0 as well.
+
+  The frps.exe / frpc.exe inside this package were built from the
+  official frp v0.71.0 sources with:
+  CGO_ENABLED=0 GOOS=windows GOARCH=amd64 -trimpath -ldflags "-s -w"
+  and include the complete web dashboard front end.
+
+======================================================================

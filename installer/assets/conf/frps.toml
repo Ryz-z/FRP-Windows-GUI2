@@ -1,0 +1,27 @@
+# frps 服务端配置示例
+# 说明：图形界面（FrpWin.exe）在保存设置时会重新生成这个文件。
+#       手工编写也可以，用命令行运行：frps.exe -c frps.toml
+
+# 服务端监听地址与端口，客户端要连这个端口
+bindAddr = "0.0.0.0"
+bindPort = 7000
+
+# 认证令牌，客户端的 auth.token 必须与此完全一致，务必改复杂一些
+auth.method = "token"
+auth.token = "请改成你自己的复杂密码"
+
+# Web 管理面板，浏览器访问 http://服务器IP:7500
+# 不需要就把 webServer.port 设为 0
+webServer.addr = "0.0.0.0"
+webServer.port = 7500
+webServer.user = "admin"
+webServer.password = "请改掉默认密码"
+
+# 日志
+log.to = "console"
+log.level = "info"
+
+# 只允许客户端使用下面这些远程端口（可选，注释掉表示不限制）
+# allowPorts = [
+#   { start = 13000, end = 14000 }
+# ]
